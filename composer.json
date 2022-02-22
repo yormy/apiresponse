@@ -1,0 +1,72 @@
+{
+    "name": "yormy/apiresponse",
+    "description": "",
+    "keywords": [
+        "yormy",
+        "Apiresponse"
+    ],
+    "homepage": "https://gitlab.com/yormy/apiresponse",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Yormy",
+            "email": "dev@yormy.com",
+            "homepage": "https://yormy.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^8.1|^8.2",
+        "laravel/framework": "^9|^10"
+    },
+    "require-dev": {
+        "yormy/dev-tools-laravel": "^1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Yormy\\Apiresponse\\": "src",
+            "Yormy\\Apiresponse\\Database\\Factories\\": "database/factories"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Yormy\\Apiresponse\\Tests\\": "tests"
+        }
+    },
+    "scripts": {
+        "---------- STYLE ---------- ": "",
+        "pint": "vendor/bin/pint",
+        "cs-fixer": "phpcbf",
+        "md": "vendor/bin/phpmd . html cleancode --reportfile report.html",
+        "phpcs": "phpcs --standard=PSR2 -s --exclude=Generic.Files.LineLength --standard=./phpcs.xml --report-file=phpcs-report.txt",
+        "---------- ANALYSIS ---------- ": "",
+        "phpstan": "vendor/bin/phpstan analyze src --error-format=raw --level=4",
+        "psalm": "vendor/bin/psalm --no-diff --no-cache --report-show-info=false --report=psalm-report.txt",
+        "psalm-debug": "vendor/bin/psalm --no-cache --debug --debug-by-line",
+        "---------- TEST ---------- ": "",
+        "test": "vendor/bin/phpunit tests/Features tests/Unit --colors=always --testdox",
+        "test:unit": "vendor/bin/paratest --colors=always --testdox --testsuite Unit",
+        "test:feature": "vendor/bin/paratest --colors=always --testdox --testsuite Feature",
+        "test-browser": "vendor/bin/phpunit tests/Browser --colors=always --testdox",
+        "test-coverage": "vendor/bin/phpunit --coverage-html coverage",
+        "---------- POST ---------- ": "",
+        "post-update-cmd": [
+            "local-php-security-checker-installer && local-php-security-checker"
+        ]
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Yormy\\Apiresponse\\ApiresponseServiceProvider"
+            ],
+            "aliases": {
+                "Apiresponse": "Yormy\\Apiresponse\\ApiresponseFacade"
+            }
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
