@@ -8,8 +8,8 @@ class Success
         'httpCode' => 200,
         'type' => 'core',
         'code' => 'SUCCESS',
-        'messageKey' => "",
-        'doc_url' => ""
+        'messageKey' => '',
+        'doc_url' => '',
     ];
 
     const SUCCESS_DELETED = [
@@ -17,7 +17,7 @@ class Success
         'type' => 'core',
         'code' => 'SUCCESS',
         'messageKey' => 'bedrock-core::general.deleted.success',
-        'doc_url' => ''
+        'doc_url' => '',
     ];
 
     const SUCCESS_CREATED = [
@@ -25,7 +25,7 @@ class Success
         'type' => 'core',
         'code' => 'SUCCESS',
         'messageKey' => 'bedrock-core::general.created.success',
-        'doc_url' => ''
+        'doc_url' => '',
     ];
 
     const SUCCESS_UPDATED = [
@@ -33,7 +33,7 @@ class Success
         'type' => 'core',
         'code' => 'SUCCESS',
         'messageKey' => 'bedrock-core::general.updated.success',
-        'doc_url' => ''
+        'doc_url' => '',
     ];
 
     const SUCCESS_STORED = [
@@ -41,6 +41,6 @@ class Success
         'type' => 'core',
         'code' => 'SUCCESS',
         'messageKey' => 'bedrock-core::general.stored.success',
-        'doc_url' => ''
+        'doc_url' => '',
     ];
 }

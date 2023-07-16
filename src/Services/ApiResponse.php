@@ -9,9 +9,13 @@ use Yormy\Apiresponse\DataObjects\Success;
 class ApiResponse
 {
     private $data;
+
     private ?int $httpCode = null;
+
     private ?string $redirectToUrl = null;
+
     private ?string $message = null;
+
     private ?string $messageKey = null;
 
     private ?string $redirectedFromUrl = null;
@@ -86,6 +90,7 @@ class ApiResponse
     public function errorResponse(array $responseObject): JsonResponse
     {
         $this->responseObject = $responseObject;
+
         return $this->returnWithStatus('error');
     }
 
@@ -94,7 +99,8 @@ class ApiResponse
         $data = $this->buildStructure();
         $data['status'] = $status;
 
-        $returnHttpCode = (int)$this->getValue($this->responseObject, 'httpCode', (string)$this->httpCode);
+        $returnHttpCode = (int) $this->getValue($this->responseObject, 'httpCode', (string) $this->httpCode);
+
         return response()->json($data, $returnHttpCode);
     }
 
@@ -134,7 +140,7 @@ class ApiResponse
 
         $message = $this->message;
 
-        if (!$message &&
+        if (! $message &&
             array_key_exists('messageKey', $this->responseObject)
         ) {
             $message = '';
@@ -147,7 +153,7 @@ class ApiResponse
             $message = __($this->messageKey, $this->parameters);
         }
 
-        return (string)$message;
+        return (string) $message;
     }
 
     private function buildResponseValue($key, $value, $response)
@@ -159,14 +165,13 @@ class ApiResponse
         return $response;
     }
 
-
-    private function getValue(array $responseObject, string $key, ?string $override = null): string
+    private function getValue(array $responseObject, string $key, string $override = null): string
     {
         if ($override) {
             return $override;
         }
 
-        if (!array_key_exists($key, $responseObject)) {
+        if (! array_key_exists($key, $responseObject)) {
             return '';
         }
 
@@ -176,30 +181,35 @@ class ApiResponse
     public function successResponse(): JsonResponse
     {
         $this->responseObject = Success::SUCCESS;
+
         return $this->returnWithStatus('success');
     }
 
     public function successResponseCreated(): JsonResponse
     {
         $this->responseObject = Success::SUCCESS_CREATED;
+
         return $this->returnWithStatus('success');
     }
 
     public function successResponseUpdated(): JsonResponse
     {
         $this->responseObject = Success::SUCCESS_UPDATED;
+
         return $this->returnWithStatus('success');
     }
 
     public function successResponseStored(): JsonResponse
     {
         $this->responseObject = Success::SUCCESS_STORED;
+
         return $this->returnWithStatus('success');
     }
 
     public function successResponseDeleted(): JsonResponse
     {
         $this->responseObject = Success::SUCCESS_DELETED;
+
         return $this->returnWithStatus('success');
     }
 }
