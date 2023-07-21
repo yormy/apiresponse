@@ -6,7 +6,8 @@ All notable changes to `Apiresponse` will be documented in this file
 
 ## [Unreleased] 
 [branch]
-- what you are currently working on
+- Use ApiResponse as Facade
+
  
 ## [0.0.1] - 2020-11-24
 

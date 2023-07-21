@@ -60,7 +60,7 @@
                 "Yormy\\Apiresponse\\ApiresponseServiceProvider"
             ],
             "aliases": {
-                "Apiresponse": "Yormy\\Apiresponse\\ApiresponseFacade"
+                "ApiResponse": "Yormy\\ApiResponse\\Facades\\ApiResponse"
             }
         }
     },

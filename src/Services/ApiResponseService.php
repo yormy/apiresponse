@@ -6,7 +6,7 @@ use stdClass;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Yormy\Apiresponse\DataObjects\Success;
 
-class ApiResponse
+class ApiResponseService
 {
     private $data;
 
