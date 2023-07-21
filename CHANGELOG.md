@@ -6,8 +6,10 @@ All notable changes to `Apiresponse` will be documented in this file
 
 ## [Unreleased] 
 [branch]
-- Use ApiResponse as Facade
 
+### Added
+- Use ApiResponse as Facade
+- abortable response  ApiResponse::abort()->errorResponse
  
 ## [0.0.1] - 2020-11-24
 

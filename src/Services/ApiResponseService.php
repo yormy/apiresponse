@@ -26,6 +26,8 @@ class ApiResponseService
 
     private bool $withoutMessage;
 
+    private bool $asAbort = false;
+
     public function __construct()
     {
         $this->withoutMessage = false;
@@ -91,7 +93,20 @@ class ApiResponseService
     {
         $this->responseObject = $responseObject;
 
-        return $this->returnWithStatus('error');
+        $return = $this->returnWithStatus('error');
+
+        if ($this->asAbort) {
+            abort($return);
+        }
+        
+        return $return;
+    }
+
+    public function abort(): self
+    {
+        $this->asAbort = true;
+
+        return $this;
     }
 
     private function returnWithStatus(string $status): JsonResponse
