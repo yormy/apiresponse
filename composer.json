@@ -39,6 +39,8 @@
         "cs-fixer": "phpcbf",
         "md": "vendor/bin/phpmd . html cleancode --reportfile report.html",
         "phpcs": "phpcs --standard=PSR2 -s --exclude=Generic.Files.LineLength --standard=./phpcs.xml --report-file=phpcs-report.txt",
+        "---------- IDE-HELPERS ---------- ": "",
+        "ide-helpers": "php vendor/bin/testbench clear-compiled && php vendor/bin/testbench ide-helper:generate && php vendor/bin/testbench --write ide-helper:models && php vendor/bin/testbench ide-helper:meta",
         "---------- ANALYSIS ---------- ": "",
         "phpstan": "vendor/bin/phpstan analyze src --error-format=raw --level=4",
         "psalm": "vendor/bin/psalm --no-diff --no-cache --report-show-info=false --report=psalm-report.txt",
