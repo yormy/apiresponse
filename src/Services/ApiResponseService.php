@@ -5,6 +5,7 @@ namespace Yormy\Apiresponse\Services;
 use stdClass;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Yormy\Apiresponse\DataObjects\Success;
+use Yormy\Apiresponse\Exceptions\InvalidResponseConfigException;
 
 class ApiResponseService
 {
@@ -91,6 +92,8 @@ class ApiResponseService
 
     public function errorResponse(array $responseObject): JsonResponse
     {
+        $this->validateResponseObject($responseObject);
+
         $this->responseObject = $responseObject;
 
         $return = $this->returnWithStatus('error');
@@ -98,8 +101,25 @@ class ApiResponseService
         if ($this->asAbort) {
             abort($return);
         }
-        
+
         return $return;
+    }
+
+    private function validateResponseObject(array $responseObject)
+    {
+        $allowedKeys = [
+            'httpCode',
+            'type',
+            'code',
+            'messageKey',
+            'doc_url'
+        ];
+
+        foreach (array_keys($responseObject) as $key) {
+            if (!in_array($key, $allowedKeys)) {
+                throw new InvalidResponseConfigException("$key is not a valid key for the response object");
+            }
+        }
     }
 
     public function abort(): self
@@ -121,6 +141,8 @@ class ApiResponseService
 
     private function buildStructure(): array
     {
+        $this->validateResponseObject($this->responseObject);
+
         $responseObject = $this->responseObject;
 
         $message = $this->determineMessage();
