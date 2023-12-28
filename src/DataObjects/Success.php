@@ -16,7 +16,7 @@ class Success
         'httpCode' => 200,
         'type' => 'core',
         'code' => 'SUCCESS',
-        'messageKey' => 'bedrock-core::general.deleted.success',
+        'messageKey' => 'apiresponse::response.deleted.success',
         'doc_url' => '',
     ];
 
@@ -24,7 +24,7 @@ class Success
         'httpCode' => 201,
         'type' => 'core',
         'code' => 'SUCCESS',
-        'messageKey' => 'bedrock-core::general.created.success',
+        'messageKey' => 'apiresponse::response.created.success',
         'doc_url' => '',
     ];
 
@@ -32,7 +32,7 @@ class Success
         'httpCode' => 200,
         'type' => 'core',
         'code' => 'SUCCESS',
-        'messageKey' => 'bedrock-core::general.updated.success',
+        'messageKey' => 'apiresponse::response.updated.success',
         'doc_url' => '',
     ];
 
@@ -40,7 +40,7 @@ class Success
         'httpCode' => 200,
         'type' => 'core',
         'code' => 'SUCCESS',
-        'messageKey' => 'bedrock-core::general.stored.success',
+        'messageKey' => 'apiresponse::response.stored.success',
         'doc_url' => '',
     ];
 }
