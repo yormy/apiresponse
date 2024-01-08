@@ -61,7 +61,7 @@ class ApiResponseService
 
     public function withRedirectRoute(string $redirectToRoute, bool $withSourceRedirect = true): self
     {
-        return $this->withRedirect(route($redirectToRoute, $withSourceRedirect));
+        return $this->withRedirect(route($redirectToRoute), $withSourceRedirect);
     }
 
     public function withoutMessage(): self
