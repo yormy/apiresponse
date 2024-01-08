@@ -48,18 +48,20 @@ class ApiResponseService
         return $this;
     }
 
-    public function withRedirect(string $redirectToUrl): self
+    public function withRedirect(string $redirectToUrl, bool $withSourceRedirect = true): self
     {
         $this->redirectToUrl = $redirectToUrl;
 
-        $this->redirectedFromUrl = url()->current();
+        if ($withSourceRedirect) {
+            $this->redirectedFromUrl = url()->current();
+        }
 
         return $this;
     }
 
-    public function withRedirectRoute(string $redirectToRoute): self
+    public function withRedirectRoute(string $redirectToRoute, bool $withSourceRedirect = true): self
     {
-        return $this->withRedirect(route($redirectToRoute));
+        return $this->withRedirect(route($redirectToRoute, $withSourceRedirect));
     }
 
     public function withoutMessage(): self
