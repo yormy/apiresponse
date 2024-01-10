@@ -6,6 +6,7 @@ use stdClass;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Yormy\Apiresponse\DataObjects\Success;
 use Yormy\Apiresponse\Exceptions\InvalidResponseConfigException;
+use Carbon\Carbon;
 
 class ApiResponseService
 {
@@ -167,6 +168,9 @@ class ApiResponseService
         } else{
             $response['data'] = $data;
         }
+
+        $response['date'] = Carbon::now()->format('Y-m-d H:m:s');
+
 
         $docUrl = $this->getValue($responseObject, 'doc_url');
         $response = $this->buildResponseValue('doc_url', $docUrl, $response);
