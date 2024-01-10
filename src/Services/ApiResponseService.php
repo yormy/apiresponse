@@ -7,10 +7,13 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Yormy\Apiresponse\DataObjects\Success;
 use Yormy\Apiresponse\Exceptions\InvalidResponseConfigException;
 use Carbon\Carbon;
+use Illuminate\Support\Str;
 
 class ApiResponseService
 {
     private $data;
+
+    private string $idPrefix = 'main-';
 
     private ?int $httpCode = null;
 
@@ -93,6 +96,13 @@ class ApiResponseService
         return $this;
     }
 
+    public function withIdPrefix(string $idPrefix): self
+    {
+        $this->idPrefix = $idPrefix .'-';
+
+        return $this;
+    }
+
     public function errorResponse(array $responseObject): JsonResponse
     {
         $this->validateResponseObject($responseObject);
@@ -156,6 +166,7 @@ class ApiResponseService
         }
 
         $response = [
+            'id' => $this->idPrefix. Str::ulid(),
             'type' => $this->getValue($responseObject, 'type'),
             'code' => $this->getValue($responseObject, 'code'),
             'message' => $message,
@@ -170,6 +181,7 @@ class ApiResponseService
         }
 
         $response['date'] = Carbon::now()->format('Y-m-d H:m:s');
+
 
 
         $docUrl = $this->getValue($responseObject, 'doc_url');
