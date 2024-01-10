@@ -153,12 +153,20 @@ class ApiResponseService
         if ($data === null) {
             $data = new stdClass();
         }
+
         $response = [
             'type' => $this->getValue($responseObject, 'type'),
             'code' => $this->getValue($responseObject, 'code'),
             'message' => $message,
-            'data' => $data,
         ];
+
+        if (array_key_exists('meta', $data) && array_key_exists('data', $data))
+        {
+            $response['data'] = $data['data'];
+            $response['meta'] = $data['meta'];
+        } else{
+            $response['data'] = $data;
+        }
 
         $docUrl = $this->getValue($responseObject, 'doc_url');
         $response = $this->buildResponseValue('doc_url', $docUrl, $response);
