@@ -172,7 +172,7 @@ class ApiResponseService
             'message' => $message,
         ];
 
-        if (array_key_exists('meta', $data) && array_key_exists('data', $data))
+        if (is_array($data) && array_key_exists('meta', $data) && array_key_exists('data', $data))
         {
             $response['data'] = $data['data'];
             $response['meta'] = $data['meta'];
