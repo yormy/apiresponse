@@ -162,7 +162,7 @@ class ApiResponseService
 
         $data = $this->data;
         if ($data === null) {
-            $data = new stdClass();
+            $data = [];
         }
 
         $response = [
