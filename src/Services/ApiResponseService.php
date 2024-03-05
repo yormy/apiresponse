@@ -172,12 +172,19 @@ class ApiResponseService
             'message' => $message,
         ];
 
-        if (is_array($data) && array_key_exists('meta', $data) && array_key_exists('data', $data))
-        {
-            $response['data'] = $data['data'];
+        if (!is_array($data)) {
+            $data = json_decode($data->toJson(), true); // flatten laravel-data
+        }
+
+        $response['data'] = $data;
+        if (is_array($data) && array_key_exists('meta', $data)) {
             $response['meta'] = $data['meta'];
-        } else{
-            $response['data'] = $data;
+        }
+        if (is_array($data) && array_key_exists('data', $data)) {
+            $response['data'] = $data['data'];
+        }
+        if (is_array($data) && array_key_exists('links', $data)) {
+            $response['links'] = $data['links'];
         }
 
         $response['date'] = Carbon::now()->format('Y-m-d H:m:s');
