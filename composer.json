@@ -45,7 +45,7 @@
         "---------- ANALYSIS ---------- ": "",
         "insights": "./vendor/bin/testbench insights",
         "stan": "./vendor/bin/phpstan analyse -c phpstan.conf.neon --memory-limit=2G",
-        "stan:baseline": "./vendor/bin/phpstan analyse --memory-limit=2G --generate-baseline",
+        "stan:baseline": "./vendor/bin/phpstan  analyse -c phpstan.conf.neon --memory-limit=2G --generate-baseline",
         "coverage:check" : "composer coverage:clover && php coverage-checker.php clover.xml 50",
         "coverage:report" : "php -dpcov.enabled=1 -dpcov.directory=. -dpcov.exclude='~vendor~' ./vendor/bin/phpunit --coverage-html ./meta/coverage ",
         "coverage:text" : "php -dpcov.enabled=1 -dpcov.directory=. -dpcov.exclude='~vendor~' ./vendor/bin/phpunit --coverage-text ",
