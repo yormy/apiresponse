@@ -1,32 +1,50 @@
-name: Tests (PHP)
+name: Testing
 
 on: [push]
 
 jobs:
-  tests:
-    name: Run tests
+  unit-test:
+    name: Unit testing
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-      - name: Cache composer dependencies
-        uses: actions/cache@v1
+      - name: Cache Composer dependencies
+        uses: actions/cache@v3
         with:
-          path: vendor
-          key: composer-${{ hashFiles('composer.lock') }}
+          path: /tmp/composer-cache
+          key: ${{ runner.os }}-${{ hashFiles('composer.lock') }}
 
-      - name: Run composer install
-        run: composer install -n --prefer-dist
-
-      - name: Run Unit tests
-        run: composer test:unit
-
-      - name: Run Basic tests
-        run: composer test:feature
-
-      - name: Upload artifacts
-        uses: actions/upload-artifact@master
-        if: failure()
+      - name: Installing dependencies
+        uses: php-actions/composer@v6
         with:
-          name: Logs
-          path: ./storage/logs
+          php_version: 8.2
+          php_extensions: "json zip sodium pcntl bcmath"
+
+      - name: Running unit test
+        uses: php-actions/phpunit@v3
+        with:
+          version: 10.5.13
+          php_version: 8.2
+          php_extensions: "json zip sodium pcntl bcmath xdebug pcov"
+          args: "-d date.timezone=Asia/Jakarta"
+          memory_limit: 300M
+          configuration: phpunit.xml
+          coverage_clover: "./coverage/clover.xml"
+
+#      - name: Ensure coverage > 70
+#        id: test-coverage
+#        uses: johanvanhelden/gha-clover-test-coverage-check@v1
+#        with:
+#          percentage: "70"
+#          filename: "./coverage/clover.xml"
+#
+#      - name: Generate the badge SVG image
+#        uses: emibcn/badge-action@v1
+#        id: badge
+#        with:
+#          label: 'Coverage'
+#          status: ${{ steps.coverage.outputs.coverage }}
+#          path: ./badges/test-coverage.svg
+#          color: ${{ steps.coverage.outputs.coveragelines > 70 && 'green' || 'red' }}
