@@ -14,7 +14,7 @@ use Yormy\Apiresponse\Services\ApiResponseService;
  */
 class ApiResponse extends Facade
 {
-    protected static function getFacadeAccessor()
+    protected static function getFacadeAccessor(): string
     {
         return ApiResponseService::class;
     }

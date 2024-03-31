@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yormy\Apiresponse\Services;
 
 use Carbon\Carbon;
+use Illuminate\Routing\UrlGenerator;
 use Illuminate\Support\Str;
 use stdClass;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -13,7 +14,7 @@ use Yormy\Apiresponse\Exceptions\InvalidResponseConfigException;
 
 class ApiResponseService
 {
-    private $data;
+    private mixed $data = null;
 
     private string $idPrefix = 'main-';
 
@@ -40,7 +41,7 @@ class ApiResponseService
         $this->withoutMessage = false;
     }
 
-    public function withData($data): self
+    public function withData(mixed $data): self
     {
         $this->data = $data;
 
@@ -58,10 +59,12 @@ class ApiResponseService
     {
         $this->redirectToUrl = $redirectToUrl;
 
+        /** @var UrlGenerator $urlGenerator */
+        $urlGenerator = url();
         if ($withSourceRedirect) {
-            $this->redirectedFromUrl = url()->current();
+            $this->redirectedFromUrl = $urlGenerator->current();
         }
-        $this->redirectedFromUrl = url()->current();
+        $this->redirectedFromUrl = $urlGenerator->current();
 
         return $this;
     }
@@ -92,7 +95,7 @@ class ApiResponseService
         return $this;
     }
 
-    public function withParameters($parameters): self
+    public function withParameters(array $parameters): self
     {
         $this->parameters = $parameters;
 
@@ -198,7 +201,7 @@ class ApiResponseService
 
         $returnHttpCode = (int) $this->getValue($this->responseObject, 'httpCode', (string) $this->httpCode);
 
-        return response()->json($data, $returnHttpCode);
+        return response()->json($data, $returnHttpCode); // @phpstan-ignore-line
     }
 
     //    private function buildStructure(): array
@@ -253,7 +256,12 @@ class ApiResponseService
         ];
 
         if (! is_array($data)) {
-            $data = json_decode(json_encode($data), true); // flatten laravel-data
+            $decoded = json_encode($data);
+            if ($decoded) {
+                $data = json_decode($decoded, true); // flatten laravel-data
+            } else {
+                $data = [];
+            }
         }
 
         $response['data'] = $data;
@@ -299,10 +307,10 @@ class ApiResponseService
             $message = __($this->messageKey, $this->parameters);
         }
 
-        return (string) $message;
+        return (string) $message; //@phpstan-ignore-line
     }
 
-    private function buildResponseValue($key, $value, $response)
+    private function buildResponseValue(string $key, ?string $value, array $response): array
     {
         if ($value) {
             $response[$key] = $value;
@@ -311,7 +319,7 @@ class ApiResponseService
         return $response;
     }
 
-    private function getValue(array $responseObject, string $key, ?string $override = null): string
+    private function getValue(array $responseObject, string $key, ?string $override = null): mixed
     {
         if ($override) {
             return $override;
