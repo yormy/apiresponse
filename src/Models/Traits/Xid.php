@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 //namespace Yormy\Xid\Models\Traits;
 //
 //use Yormy\Xid\Services\XidService;

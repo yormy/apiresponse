@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Yormy\Apiresponse\DataObjects;
 
 class Success
 {
-    const SUCCESS = [
+    public const SUCCESS = [
         'httpCode' => 200,
         'type' => 'core',
         'code' => 'SUCCESS',
@@ -12,7 +14,7 @@ class Success
         'doc_url' => '',
     ];
 
-    const SUCCESS_DELETED = [
+    public const SUCCESS_DELETED = [
         'httpCode' => 200,
         'type' => 'core',
         'code' => 'SUCCESS',
@@ -20,7 +22,7 @@ class Success
         'doc_url' => '',
     ];
 
-    const SUCCESS_CREATED = [
+    public const SUCCESS_CREATED = [
         'httpCode' => 201,
         'type' => 'core',
         'code' => 'SUCCESS',
@@ -28,7 +30,7 @@ class Success
         'doc_url' => '',
     ];
 
-    const SUCCESS_UPDATED = [
+    public const SUCCESS_UPDATED = [
         'httpCode' => 200,
         'type' => 'core',
         'code' => 'SUCCESS',
@@ -36,7 +38,7 @@ class Success
         'doc_url' => '',
     ];
 
-    const SUCCESS_STORED = [
+    public const SUCCESS_STORED = [
         'httpCode' => 200,
         'type' => 'core',
         'code' => 'SUCCESS',

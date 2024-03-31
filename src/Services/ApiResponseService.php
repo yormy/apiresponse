@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Yormy\Apiresponse\Services;
 
 use Carbon\Carbon;
@@ -122,7 +124,49 @@ class ApiResponseService
         return $return;
     }
 
-    private function validateResponseObject(array $responseObject)
+    public function abort(): self
+    {
+        $this->asAbort = true;
+
+        return $this;
+    }
+
+    public function successResponse(): JsonResponse
+    {
+        $this->responseObject = Success::SUCCESS;
+
+        return $this->returnWithStatus('success');
+    }
+
+    public function successResponseCreated(): JsonResponse
+    {
+        $this->responseObject = Success::SUCCESS_CREATED;
+
+        return $this->returnWithStatus('success');
+    }
+
+    public function successResponseUpdated(): JsonResponse
+    {
+        $this->responseObject = Success::SUCCESS_UPDATED;
+
+        return $this->returnWithStatus('success');
+    }
+
+    public function successResponseStored(): JsonResponse
+    {
+        $this->responseObject = Success::SUCCESS_STORED;
+
+        return $this->returnWithStatus('success');
+    }
+
+    public function successResponseDeleted(): JsonResponse
+    {
+        $this->responseObject = Success::SUCCESS_DELETED;
+
+        return $this->returnWithStatus('success');
+    }
+
+    private function validateResponseObject(array $responseObject): void
     {
         $allowedKeys = [
             'httpCode',
@@ -134,16 +178,9 @@ class ApiResponseService
 
         foreach (array_keys($responseObject) as $key) {
             if (! in_array($key, $allowedKeys)) {
-                throw new InvalidResponseConfigException("$key is not a valid key for the response object");
+                throw new InvalidResponseConfigException("{$key} is not a valid key for the response object");
             }
         }
-    }
-
-    public function abort(): self
-    {
-        $this->asAbort = true;
-
-        return $this;
     }
 
     private function returnWithStatus(string $status): JsonResponse
@@ -238,9 +275,7 @@ class ApiResponseService
         $redirectTo = $this->getValue($responseObject, 'redirect_to', $this->redirectToUrl);
         $response = $this->buildResponseValue('redirect_to', $redirectTo, $response);
 
-        $response = $this->buildResponseValue('redirect_from', $this->redirectedFromUrl, $response);
-
-        return $response;
+        return $this->buildResponseValue('redirect_from', $this->redirectedFromUrl, $response);
     }
 
     private function determineMessage(): string
@@ -291,40 +326,5 @@ class ApiResponseService
         }
 
         return $responseObject[$key];
-    }
-
-    public function successResponse(): JsonResponse
-    {
-        $this->responseObject = Success::SUCCESS;
-
-        return $this->returnWithStatus('success');
-    }
-
-    public function successResponseCreated(): JsonResponse
-    {
-        $this->responseObject = Success::SUCCESS_CREATED;
-
-        return $this->returnWithStatus('success');
-    }
-
-    public function successResponseUpdated(): JsonResponse
-    {
-        $this->responseObject = Success::SUCCESS_UPDATED;
-
-        return $this->returnWithStatus('success');
-    }
-
-    public function successResponseStored(): JsonResponse
-    {
-        $this->responseObject = Success::SUCCESS_STORED;
-
-        return $this->returnWithStatus('success');
-    }
-
-    public function successResponseDeleted(): JsonResponse
-    {
-        $this->responseObject = Success::SUCCESS_DELETED;
-
-        return $this->returnWithStatus('success');
     }
 }
