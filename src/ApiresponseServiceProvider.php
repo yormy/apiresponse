@@ -14,12 +14,12 @@ class ApiresponseServiceProvider extends ServiceProvider
 
     public function register()
     {
-        // ...
+        $this->mergeConfigFrom(__DIR__ . '/../config/config.php', 'apiresponse');
     }
 
     public function registerTranslations(): void
     {
-        $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'apiresponse');
+        $this->loadTranslationsFrom(__DIR__ . '/../resources/lang', 'apiresponse');
     }
 
 
@@ -27,7 +27,7 @@ class ApiresponseServiceProvider extends ServiceProvider
     {
         if ($this->app->runningInConsole()) {
             $this->publishes([
-                __DIR__.'/../resources/lang' => resource_path('lang/vendor/apiresponse'),
+                __DIR__ . '/../resources/lang' => resource_path('lang/vendor/apiresponse'),
             ], 'translations');
         }
     }
