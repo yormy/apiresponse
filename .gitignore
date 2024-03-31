@@ -6,3 +6,4 @@ build
 coverage
 psalm.xml
 vendor
+node_modules
