@@ -29,7 +29,6 @@ class DataTest extends TestCase
      * @test
      *
      * @group data
-     * @group xxx
      */
     public function NestedDataField(): void
     {

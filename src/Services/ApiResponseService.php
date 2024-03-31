@@ -197,6 +197,7 @@ class ApiResponseService
         $message = $this->determineMessage();
 
         $data = $this->data;
+
         if ($data === null) {
             $data = [];
             $data = new stdClass();
@@ -219,15 +220,13 @@ class ApiResponseService
             $response['meta'] = $data['meta'];
         }
         if (is_array($data) && array_key_exists('data', $data)) {
-            $response['data'] = $data['data'];
+         //   $response['data'] = $data['data'];
         }
         if (is_array($data) && array_key_exists('links', $data)) {
             $response['links'] = $data['links'];
         }
 
         $response['date'] = Carbon::now()->format('Y-m-d H:m:s');
-
-
 
         $docUrl = $this->getValue($responseObject, 'doc_url');
         $response = $this->buildResponseValue('doc_url', $docUrl, $response);
