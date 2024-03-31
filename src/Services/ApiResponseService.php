@@ -2,13 +2,19 @@
 
 namespace Yormy\Apiresponse\Services;
 
+use Carbon\Carbon;
+use Illuminate\Support\Str;
 use stdClass;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Yormy\Apiresponse\DataObjects\Success;
+use Yormy\Apiresponse\Exceptions\InvalidResponseConfigException;
 
 class ApiResponseService
 {
     private $data;
+
+    private string $idPrefix = 'main-';
+
     private ?int $httpCode = null;
     private ?string $redirectToUrl = null;
     private ?string $message = null;
@@ -21,6 +27,8 @@ class ApiResponseService
     private array $parameters = [];
 
     private bool $withoutMessage;
+
+    private bool $asAbort = false;
 
     public function __construct()
     {
@@ -41,18 +49,21 @@ class ApiResponseService
         return $this;
     }
 
-    public function withRedirect(string $redirectToUrl): self
+    public function withRedirect(string $redirectToUrl, bool $withSourceRedirect = true): self
     {
         $this->redirectToUrl = $redirectToUrl;
 
+        if ($withSourceRedirect) {
+            $this->redirectedFromUrl = url()->current();
+        }
         $this->redirectedFromUrl = url()->current();
 
         return $this;
     }
 
-    public function withRedirectRoute(string $redirectToRoute): self
+    public function withRedirectRoute(string $redirectToRoute, bool $withSourceRedirect = true): self
     {
-        return $this->withRedirect(route($redirectToRoute));
+        return $this->withRedirect(route($redirectToRoute), $withSourceRedirect);
     }
 
     public function withoutMessage(): self
@@ -83,37 +94,140 @@ class ApiResponseService
         return $this;
     }
 
+    public function withIdPrefix(string $idPrefix): self
+    {
+        $this->idPrefix = $idPrefix .'-';
+
+        return $this;
+    }
+
     public function errorResponse(array $responseObject): JsonResponse
     {
+//        $this->responseObject = $responseObject;
+//        return $this->returnWithStatus('error');
+
+        $this->validateResponseObject($responseObject);
+
         $this->responseObject = $responseObject;
-        return $this->returnWithStatus('error');
+
+        $return = $this->returnWithStatus('error');
+
+        if ($this->asAbort) {
+            abort($return);
+        }
+
+        return $return;
+    }
+
+    private function validateResponseObject(array $responseObject)
+    {
+        $allowedKeys = [
+            'httpCode',
+            'type',
+            'code',
+            'messageKey',
+            'doc_url'
+        ];
+
+        foreach (array_keys($responseObject) as $key) {
+            if (!in_array($key, $allowedKeys)) {
+                throw new InvalidResponseConfigException("$key is not a valid key for the response object");
+            }
+        }
+    }
+
+    public function abort(): self
+    {
+        $this->asAbort = true;
+
+        return $this;
     }
 
     private function returnWithStatus(string $status): JsonResponse
     {
+//        $data = $this->buildStructure();
+//        $data['status'] = $status;
+//
+//        $returnHttpCode = (int)$this->getValue($this->responseObject, 'httpCode', (string)$this->httpCode);
+//        return response()->json($data, $returnHttpCode);
+
         $data = $this->buildStructure();
         $data['status'] = $status;
+
+        $returnHttpCode = (int) $this->getValue($this->responseObject, 'httpCode', (string) $this->httpCode);
 
         $returnHttpCode = (int)$this->getValue($this->responseObject, 'httpCode', (string)$this->httpCode);
         return response()->json($data, $returnHttpCode);
     }
 
+//    private function buildStructure(): array
+//    {
+//        $responseObject = $this->responseObject;
+//
+//        $message = $this->determineMessage();
+//
+//        $data = $this->data;
+//        if ($data === null) {
+//            $data = new stdClass();
+//        }
+//        $response = [
+//            'type' => $this->getValue($responseObject, 'type'),
+//            'code' => $this->getValue($responseObject, 'code'),
+//            'message' => $message,
+//            'data' => $data,
+//        ];
+//
+//        $docUrl = $this->getValue($responseObject, 'doc_url');
+//        $response = $this->buildResponseValue('doc_url', $docUrl, $response);
+//
+//        $redirectTo = $this->getValue($responseObject, 'redirect_to', $this->redirectToUrl);
+//        $response = $this->buildResponseValue('redirect_to', $redirectTo, $response);
+//
+//        $response = $this->buildResponseValue('redirect_from', $this->redirectedFromUrl, $response);
+//
+//        return $response;
+//    }
+
     private function buildStructure(): array
     {
+        $this->validateResponseObject($this->responseObject);
+
         $responseObject = $this->responseObject;
 
         $message = $this->determineMessage();
 
         $data = $this->data;
         if ($data === null) {
+            $data = [];
             $data = new stdClass();
         }
+
         $response = [
+            'id' => $this->idPrefix. Str::ulid(),
             'type' => $this->getValue($responseObject, 'type'),
             'code' => $this->getValue($responseObject, 'code'),
             'message' => $message,
             'data' => $data,
         ];
+
+        if (!is_array($data)) {
+            $data = json_decode(json_encode($data), true); // flatten laravel-data
+        }
+
+        $response['data'] = $data;
+        if (is_array($data) && array_key_exists('meta', $data)) {
+            $response['meta'] = $data['meta'];
+        }
+        if (is_array($data) && array_key_exists('data', $data)) {
+            $response['data'] = $data['data'];
+        }
+        if (is_array($data) && array_key_exists('links', $data)) {
+            $response['links'] = $data['links'];
+        }
+
+        $response['date'] = Carbon::now()->format('Y-m-d H:m:s');
+
+
 
         $docUrl = $this->getValue($responseObject, 'doc_url');
         $response = $this->buildResponseValue('doc_url', $docUrl, $response);
@@ -166,8 +280,12 @@ class ApiResponseService
             return $override;
         }
 
-        if (!array_key_exists($key, $responseObject)) {
-            return '';
+        if (! array_key_exists($key, $responseObject)) {
+            if (!array_key_exists($key, $responseObject)) {
+                return '';
+            }
+
+            return $responseObject[$key];
         }
 
         return $responseObject[$key];
