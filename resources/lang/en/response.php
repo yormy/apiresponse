@@ -2,15 +2,15 @@
 
 return [
     'created' => [
-        'success' => 'Successfully created'
+        'success' => 'Successfully created',
     ],
     'updated' => [
-        'success' => 'Successfully updated'
+        'success' => 'Successfully updated',
     ],
     'stored' => [
-        'success' => 'Successfully stored'
+        'success' => 'Successfully stored',
     ],
     'deleted' => [
-        'success' => 'Successfully deleted'
+        'success' => 'Successfully deleted',
     ],
 ];

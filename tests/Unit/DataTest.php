@@ -2,9 +2,8 @@
 
 namespace Yormy\Apiresponse\Tests\Unit;
 
-
-use Yormy\Apiresponse\Tests\TestCase;
 use Yormy\Apiresponse\Facades\ApiResponse;
+use Yormy\Apiresponse\Tests\TestCase;
 
 class DataTest extends TestCase
 {
@@ -16,7 +15,7 @@ class DataTest extends TestCase
     public function SimpleData(): void
     {
         $data = [
-            'Hello'=> 'some-data',
+            'Hello' => 'some-data',
         ];
         $responseValue = Apiresponse::withData($data)->successResponse();
 
@@ -33,10 +32,10 @@ class DataTest extends TestCase
     public function NestedDataField(): void
     {
         $data = [
-            'Hello'=> 'some-data',
+            'Hello' => 'some-data',
             'data' => [
-                'extra' => 'data'
-            ]
+                'extra' => 'data',
+            ],
         ];
         $responseValue = Apiresponse::withData($data)->successResponse();
         $content = $this->getDataField($responseValue);
@@ -49,5 +48,4 @@ class DataTest extends TestCase
     {
         return json_encode(json_decode($responseValue->getContent())->data);
     }
-
 }

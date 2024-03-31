@@ -16,8 +16,11 @@ class ApiResponseService
     private string $idPrefix = 'main-';
 
     private ?int $httpCode = null;
+
     private ?string $redirectToUrl = null;
+
     private ?string $message = null;
+
     private ?string $messageKey = null;
 
     private ?string $redirectedFromUrl = null;
@@ -96,15 +99,15 @@ class ApiResponseService
 
     public function withIdPrefix(string $idPrefix): self
     {
-        $this->idPrefix = $idPrefix .'-';
+        $this->idPrefix = $idPrefix.'-';
 
         return $this;
     }
 
     public function errorResponse(array $responseObject): JsonResponse
     {
-//        $this->responseObject = $responseObject;
-//        return $this->returnWithStatus('error');
+        //        $this->responseObject = $responseObject;
+        //        return $this->returnWithStatus('error');
 
         $this->validateResponseObject($responseObject);
 
@@ -126,11 +129,11 @@ class ApiResponseService
             'type',
             'code',
             'messageKey',
-            'doc_url'
+            'doc_url',
         ];
 
         foreach (array_keys($responseObject) as $key) {
-            if (!in_array($key, $allowedKeys)) {
+            if (! in_array($key, $allowedKeys)) {
                 throw new InvalidResponseConfigException("$key is not a valid key for the response object");
             }
         }
@@ -145,48 +148,49 @@ class ApiResponseService
 
     private function returnWithStatus(string $status): JsonResponse
     {
-//        $data = $this->buildStructure();
-//        $data['status'] = $status;
-//
-//        $returnHttpCode = (int)$this->getValue($this->responseObject, 'httpCode', (string)$this->httpCode);
-//        return response()->json($data, $returnHttpCode);
+        //        $data = $this->buildStructure();
+        //        $data['status'] = $status;
+        //
+        //        $returnHttpCode = (int)$this->getValue($this->responseObject, 'httpCode', (string)$this->httpCode);
+        //        return response()->json($data, $returnHttpCode);
 
         $data = $this->buildStructure();
         $data['status'] = $status;
 
         $returnHttpCode = (int) $this->getValue($this->responseObject, 'httpCode', (string) $this->httpCode);
 
-        $returnHttpCode = (int)$this->getValue($this->responseObject, 'httpCode', (string)$this->httpCode);
+        $returnHttpCode = (int) $this->getValue($this->responseObject, 'httpCode', (string) $this->httpCode);
+
         return response()->json($data, $returnHttpCode);
     }
 
-//    private function buildStructure(): array
-//    {
-//        $responseObject = $this->responseObject;
-//
-//        $message = $this->determineMessage();
-//
-//        $data = $this->data;
-//        if ($data === null) {
-//            $data = new stdClass();
-//        }
-//        $response = [
-//            'type' => $this->getValue($responseObject, 'type'),
-//            'code' => $this->getValue($responseObject, 'code'),
-//            'message' => $message,
-//            'data' => $data,
-//        ];
-//
-//        $docUrl = $this->getValue($responseObject, 'doc_url');
-//        $response = $this->buildResponseValue('doc_url', $docUrl, $response);
-//
-//        $redirectTo = $this->getValue($responseObject, 'redirect_to', $this->redirectToUrl);
-//        $response = $this->buildResponseValue('redirect_to', $redirectTo, $response);
-//
-//        $response = $this->buildResponseValue('redirect_from', $this->redirectedFromUrl, $response);
-//
-//        return $response;
-//    }
+    //    private function buildStructure(): array
+    //    {
+    //        $responseObject = $this->responseObject;
+    //
+    //        $message = $this->determineMessage();
+    //
+    //        $data = $this->data;
+    //        if ($data === null) {
+    //            $data = new stdClass();
+    //        }
+    //        $response = [
+    //            'type' => $this->getValue($responseObject, 'type'),
+    //            'code' => $this->getValue($responseObject, 'code'),
+    //            'message' => $message,
+    //            'data' => $data,
+    //        ];
+    //
+    //        $docUrl = $this->getValue($responseObject, 'doc_url');
+    //        $response = $this->buildResponseValue('doc_url', $docUrl, $response);
+    //
+    //        $redirectTo = $this->getValue($responseObject, 'redirect_to', $this->redirectToUrl);
+    //        $response = $this->buildResponseValue('redirect_to', $redirectTo, $response);
+    //
+    //        $response = $this->buildResponseValue('redirect_from', $this->redirectedFromUrl, $response);
+    //
+    //        return $response;
+    //    }
 
     private function buildStructure(): array
     {
@@ -204,14 +208,14 @@ class ApiResponseService
         }
 
         $response = [
-            'id' => $this->idPrefix. Str::ulid(),
+            'id' => $this->idPrefix.Str::ulid(),
             'type' => $this->getValue($responseObject, 'type'),
             'code' => $this->getValue($responseObject, 'code'),
             'message' => $message,
             'data' => $data,
         ];
 
-        if (!is_array($data)) {
+        if (! is_array($data)) {
             $data = json_decode(json_encode($data), true); // flatten laravel-data
         }
 
@@ -220,7 +224,7 @@ class ApiResponseService
             $response['meta'] = $data['meta'];
         }
         if (is_array($data) && array_key_exists('data', $data)) {
-         //   $response['data'] = $data['data'];
+            //   $response['data'] = $data['data'];
         }
         if (is_array($data) && array_key_exists('links', $data)) {
             $response['links'] = $data['links'];
@@ -247,7 +251,7 @@ class ApiResponseService
 
         $message = $this->message;
 
-        if (!$message &&
+        if (! $message &&
             array_key_exists('messageKey', $this->responseObject)
         ) {
             $message = '';
@@ -260,7 +264,7 @@ class ApiResponseService
             $message = __($this->messageKey, $this->parameters);
         }
 
-        return (string)$message;
+        return (string) $message;
     }
 
     private function buildResponseValue($key, $value, $response)
@@ -272,7 +276,6 @@ class ApiResponseService
         return $response;
     }
 
-
     private function getValue(array $responseObject, string $key, ?string $override = null): string
     {
         if ($override) {
@@ -280,7 +283,7 @@ class ApiResponseService
         }
 
         if (! array_key_exists($key, $responseObject)) {
-            if (!array_key_exists($key, $responseObject)) {
+            if (! array_key_exists($key, $responseObject)) {
                 return '';
             }
 
@@ -293,30 +296,35 @@ class ApiResponseService
     public function successResponse(): JsonResponse
     {
         $this->responseObject = Success::SUCCESS;
+
         return $this->returnWithStatus('success');
     }
 
     public function successResponseCreated(): JsonResponse
     {
         $this->responseObject = Success::SUCCESS_CREATED;
+
         return $this->returnWithStatus('success');
     }
 
     public function successResponseUpdated(): JsonResponse
     {
         $this->responseObject = Success::SUCCESS_UPDATED;
+
         return $this->returnWithStatus('success');
     }
 
     public function successResponseStored(): JsonResponse
     {
         $this->responseObject = Success::SUCCESS_STORED;
+
         return $this->returnWithStatus('success');
     }
 
     public function successResponseDeleted(): JsonResponse
     {
         $this->responseObject = Success::SUCCESS_DELETED;
+
         return $this->returnWithStatus('success');
     }
 }
