@@ -197,9 +197,7 @@ class ApiResponseService
         $data = $this->buildStructure();
         $data['status'] = $status;
 
-        $returnHttpCode = (int) $this->getValue($this->responseObject, 'httpCode', (string) $this->httpCode);
-
-        $returnHttpCode = (int) $this->getValue($this->responseObject, 'httpCode', (string) $this->httpCode);
+        $returnHttpCode = (int) $this->getValue($this->responseObject, 'httpCode', (string) $this->httpCode); // @phpstan-ignore-line
 
         return response()->json($data, $returnHttpCode); // @phpstan-ignore-line
     }
@@ -310,7 +308,7 @@ class ApiResponseService
         return (string) $message; //@phpstan-ignore-line
     }
 
-    private function buildResponseValue(string $key, ?string $value, array $response): array
+    private function buildResponseValue(string $key, mixed $value, array $response): array
     {
         if ($value) {
             $response[$key] = $value;
