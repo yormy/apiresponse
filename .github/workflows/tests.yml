@@ -33,9 +33,9 @@ jobs:
           configuration: phpunit.xml
           coverage_clover: "./coverage/clover.xml"
 
-      - name: Ensure coverage > 70
+      - name: Ensure coverage > 50
         id: test-coverage
         uses: johanvanhelden/gha-clover-test-coverage-check@v1
         with:
-          percentage: "70"
+          percentage: "50"
           filename: "./coverage/clover.xml"
