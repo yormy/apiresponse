@@ -39,12 +39,3 @@ jobs:
         with:
           percentage: "70"
           filename: "./coverage/clover.xml"
-#
-#      - name: Generate the badge SVG image
-#        uses: emibcn/badge-action@v1
-#        id: badge
-#        with:
-#          label: 'Coverage'
-#          status: ${{ steps.coverage.outputs.coverage }}
-#          path: ./badges/test-coverage.svg
-#          color: ${{ steps.coverage.outputs.coveragelines > 70 && 'green' || 'red' }}
