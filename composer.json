@@ -49,7 +49,7 @@
         "coverage:check" : "composer coverage:clover && php coverage-checker.php clover.xml 50",
         "coverage:report" : "php -dpcov.enabled=1 -dpcov.directory=. -dpcov.exclude='~vendor~' ./vendor/bin/phpunit --coverage-html ./meta/coverage ",
         "coverage:text" : "php -dpcov.enabled=1 -dpcov.directory=. -dpcov.exclude='~vendor~' ./vendor/bin/phpunit --coverage-text ",
-        "coverage:clover" : "php -dpcov.enabled=1 -dpcov.directory=. -dpcov.exclude='~vendor~' ./vendor/bin/phpunit --coverage-clover clover.xml",
+        "coverage:clover" : "php -dpcov.enabled=1 -dpcov.directory=. -dpcov.exclude='~vendor~' ./vendor/bin/phpunit --coverage-clover coverage/clover.xml",
         "---------- TEST ---------- ": "",
         "test": "vendor/bin/phpunit tests/Features tests/Unit --colors=always --testdox",
         "test:unit": "vendor/bin/paratest --colors=always --testdox --testsuite Unit",
