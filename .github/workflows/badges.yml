@@ -24,14 +24,14 @@ jobs:
           path: /tmp/composer-cache
           key: ${{ runner.os }}-${{ hashFiles('composer.lock') }}
 
-      - name: Download Clover.xml
+      - name: Download PhpInsights.json
         uses: dawidd6/action-download-artifact@v2
         with:
           workflow: analysis.yml
           name: phpinsights
           path: badges
 
-      - name: Download PhpInsights.json
+      - name: Download Clover.xml
         uses: dawidd6/action-download-artifact@v2
         with:
           workflow: testing.yml
