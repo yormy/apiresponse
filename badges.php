@@ -15,7 +15,7 @@ function badgeTestCoverage()
     $image = 'test_coverage.svg';
     $label = 'Coverage';
 
-    $path = 'clover.xml';
+    $path = 'coverage/clover.xml';
 
     $xml = new SimpleXMLElement(file_get_contents($path));
     $metrics = $xml->xpath('//metrics');
