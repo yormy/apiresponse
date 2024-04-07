@@ -4,7 +4,7 @@ $scores = [];
 $scores['stan']['code'] = ['low' => 30, 'medium' => 60];
 $scores['coverage'] = ['low' => 30, 'medium' => 60];
 
-badgeTestCoverage();
+//badgeTestCoverage();
 badgeInsightsSecurity();
 badgeInsightsCode();
 badgeStan();
