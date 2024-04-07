@@ -39,3 +39,9 @@ jobs:
         with:
           percentage: "50"
           filename: "./coverage/clover.xml"
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: clover
+          path: coverage/clover.xml
