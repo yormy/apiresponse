@@ -49,5 +49,5 @@ jobs:
       - name: upload
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          file_pattern: '*.svg *.json *.xml'
+          file_pattern: '*.svg'
           commit_message: Badges
