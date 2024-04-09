@@ -63,11 +63,11 @@ function badgeInsightsSecurity(): void
     }
 
     $insights = getInsights();
-    if (!array_key_exists('security_issues', $insights['summary'])) {
+    if (! array_key_exists('security_issues', $insights['summary'])) {
         $color = 'red';
         $issues = 'unknown';
     } else {
-        $issues = (int)$insights['summary']['security_issues'];
+        $issues = (int) $insights['summary']['security_issues'];
         if ($issues === 0) {
             $color = 'green';
         } else {
@@ -95,7 +95,7 @@ function badgeInsightsCode(): void
 
     $insights = getInsights();
 
-    $codePercentage = (int)$insights['summary']['code'];
+    $codePercentage = (int) $insights['summary']['code'];
     if ($codePercentage < $scores['stan']['code']['low']) {
         $color = 'red';
     } elseif ($codePercentage < $scores['stan']['code']['medium']) {
