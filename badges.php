@@ -1,21 +1,30 @@
 <?php
 
+declare(strict_types=1);
+
 $scores = [];
 $scores['stan']['code'] = ['low' => 30, 'medium' => 60];
 $scores['coverage'] = ['low' => 30, 'medium' => 60];
 
-//badgeTestCoverage();
+badgeTestCoverage();
 badgeInsightsSecurity();
 badgeInsightsCode();
 badgeStan();
 
-function badgeTestCoverage()
+function badgeTestCoverage(): void
 {
     global $scores;
     $image = 'test_coverage.svg';
     $label = 'Coverage';
 
     $path = 'coverage/clover.xml';
+
+    if (! file_exists($path)) {
+        $coverage = 'missing';
+        createBadge($label, $coverage, 'red', $image);
+
+        return;
+    }
 
     $xml = new SimpleXMLElement(file_get_contents($path));
     $metrics = $xml->xpath('//metrics');
@@ -37,10 +46,11 @@ function badgeTestCoverage()
         $color = 'green';
     }
 
+    $coverage = "$coverage";
     createBadge($label, $coverage, $color, $image, true);
 }
 
-function badgeInsightsSecurity()
+function badgeInsightsSecurity(): void
 {
     $image = 'insights_security.svg';
     $label = 'Security';
@@ -53,17 +63,24 @@ function badgeInsightsSecurity()
     }
 
     $insights = getInsights();
-    $issues = (int) $insights['summary']['security_issues'];
-    if ($issues === 0) {
-        $color = 'green';
-    } else {
+    if (!array_key_exists('security_issues', $insights['summary'])) {
         $color = 'red';
+        $issues = 'unknown';
+    } else {
+        $issues = (int)$insights['summary']['security_issues'];
+        if ($issues === 0) {
+            $color = 'green';
+        } else {
+            $color = 'red';
+        }
+
+        $issues = "$issues";
     }
 
     createBadge($label, $issues, $color, $image);
 }
 
-function badgeInsightsCode()
+function badgeInsightsCode(): void
 {
     global $scores;
     $image = 'insights_code.svg';
@@ -78,7 +95,7 @@ function badgeInsightsCode()
 
     $insights = getInsights();
 
-    $codePercentage = (int) $insights['summary']['code'];
+    $codePercentage = (int)$insights['summary']['code'];
     if ($codePercentage < $scores['stan']['code']['low']) {
         $color = 'red';
     } elseif ($codePercentage < $scores['stan']['code']['medium']) {
@@ -87,10 +104,11 @@ function badgeInsightsCode()
         $color = 'green';
     }
 
+    $codePercentage = "$codePercentage";
     createBadge($label, $codePercentage, $color, $image, true);
 }
 
-function badgeStan()
+function badgeStan(): void
 {
     $path = './phpstan-baseline.neon';
     $label = 'phpstan';
@@ -107,7 +125,7 @@ function badgeStan()
     createBadge($label, $value, $color, $image);
 }
 
-function createBadge(string $label, string $value, string $color, string $filename, bool $percentage = false)
+function createBadge(string $label, string $value, string $color, string $filename, bool $percentage = false): void
 {
     $label = str_replace(' ', '_', $label);
 
@@ -116,7 +134,7 @@ function createBadge(string $label, string $value, string $color, string $filena
         $unit = '%25';
     }
 
-    exec("wget https://img.shields.io/badge/$label-$value$unit-$color -O badges/$filename");
+    exec("wget https://img.shields.io/badge/{$label}-{$value}{$unit}-{$color} -O badges/{$filename}");
 }
 
 function getInsights(): array
