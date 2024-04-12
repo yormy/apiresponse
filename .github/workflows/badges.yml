@@ -31,13 +31,6 @@ jobs:
           name: phpinsights
           path: badges
 
-#      - name: Download Clover.xml
-#        uses: dawidd6/action-download-artifact@v2
-#        with:
-#          workflow: testing.yml
-#          name: clover
-#          path: coverage
-
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
