@@ -64,7 +64,6 @@ class ApiResponseService
         if ($withSourceRedirect) {
             $this->redirectedFromUrl = $urlGenerator->current();
         }
-        $this->redirectedFromUrl = $urlGenerator->current();
 
         return $this;
     }
