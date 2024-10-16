@@ -17,7 +17,7 @@
     ],
     "require": {
         "php": "^8.2",
-        "laravel/framework": "^11"
+        "laravel/framework": "^10|^11"
     },
     "require-dev": {
         "yormy/dev-tools-laravel": "dev-master"
@@ -83,6 +83,6 @@
             "dealerdirect/phpcodesniffer-composer-installer": true
         }
     },
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "prefer-stable": true
 }
