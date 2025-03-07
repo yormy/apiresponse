@@ -18,4 +18,9 @@ class ApiResponse extends Facade
     {
         return ApiResponseService::class;
     }
+
+    protected static function resolveFacadeInstance($name)
+    {
+        return app()->make(ApiResponseService::class); // Always a fresh instance
+    }
 }
